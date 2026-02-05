@@ -1,13 +1,13 @@
 [project]
 name = "templatefox"
-version = "1.0.0"
+version = "1.0.1"
 description = "Official TemplateFox Python SDK - Generate PDFs from HTML templates"
 license = {text = "MIT"}
 authors = [
   {name = "TemplateFox",email = "support@pdftemplateapi.com"},
 ]
 readme = "README.md"
-keywords = ["OpenAPI", "OpenAPI-Generator", "TemplateFox API"]
+keywords = ["pdf", "pdf-generation", "template", "api", "html-to-pdf", "templatefox", "pdf-template", "document-generation", "invoice", "report", "sdk", "pdf-api"]
 requires-python = ">=3.9"
 
 dependencies = [
@@ -18,7 +18,10 @@ dependencies = [
 ]
 
 [project.urls]
+Homepage = "https://pdftemplateapi.com"
 Repository = "https://github.com/TemplateFoxPDF/pythonsdk"
+Issues = "https://github.com/TemplateFoxPDF/pythonsdk/issues"
+Documentation = "https://pdftemplateapi.com/docs"
 
 [tool.poetry]
 requires-poetry = ">=2.0"
