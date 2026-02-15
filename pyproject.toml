@@ -1,6 +1,6 @@
 [project]
 name = "templatefox"
-version = "1.6.0"
+version = "1.6.1"
 description = "Official TemplateFox Python SDK - Generate PDFs from HTML templates"
 license = {text = "MIT"}
 authors = [
