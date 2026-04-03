@@ -19,19 +19,21 @@ from enum import Enum
 from typing_extensions import Self
 
 
-class AppRoutersV1PdfAsyncExportType(str, Enum):
+class PdfVariant(str, Enum):
     """
-    PDF export type options for async generation
+    PDF variant for standards-compliant output (PDF/A).
     """
 
     """
     allowed enum values
     """
-    URL = 'url'
+    PDF_SLASH_A_MINUS_1B = 'pdf/a-1b'
+    PDF_SLASH_A_MINUS_2B = 'pdf/a-2b'
+    PDF_SLASH_A_MINUS_3B = 'pdf/a-3b'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of AppRoutersV1PdfAsyncExportType from a JSON string"""
+        """Create an instance of PdfVariant from a JSON string"""
         return cls(json.loads(json_str))
 
 
