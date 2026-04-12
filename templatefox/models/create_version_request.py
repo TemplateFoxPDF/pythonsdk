@@ -18,23 +18,30 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
+from typing_extensions import Annotated
 from typing import Optional, Set
 from typing_extensions import Self
 from pydantic_core import to_jsonable_python
 
-class Transaction(BaseModel):
+class CreateVersionRequest(BaseModel):
     """
-    Transaction record
+    Request to create a version snapshot
     """ # noqa: E501
-    transaction_ref: StrictStr = Field(description="Unique transaction reference (UUID)")
-    transaction_type: StrictStr = Field(description="Transaction type: PDFGEN, PURCHASE, REFUND, BONUS")
-    template_id: Optional[StrictStr] = None
-    exec_tm: Optional[StrictInt] = None
-    credits: StrictInt = Field(description="Credits consumed (positive) or added (negative)")
-    created_at: StrictStr = Field(description="ISO 8601 timestamp")
-    __properties: ClassVar[List[str]] = ["transaction_ref", "transaction_type", "template_id", "exec_tm", "credits", "created_at"]
+    tag: Optional[Annotated[str, Field(strict=True, max_length=50)]] = None
+    description: Optional[Annotated[str, Field(strict=True, max_length=500)]] = None
+    __properties: ClassVar[List[str]] = ["tag", "description"]
+
+    @field_validator('tag')
+    def tag_validate_regular_expression(cls, value):
+        """Validates the regular expression"""
+        if value is None:
+            return value
+
+        if not re.match(r"^[a-z0-9][a-z0-9_-]{0,48}[a-z0-9]$", value):
+            raise ValueError(r"must validate the regular expression /^[a-z0-9][a-z0-9_-]{0,48}[a-z0-9]$/")
+        return value
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -54,7 +61,7 @@ class Transaction(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of Transaction from a JSON string"""
+        """Create an instance of CreateVersionRequest from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -75,21 +82,21 @@ class Transaction(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if template_id (nullable) is None
+        # set to None if tag (nullable) is None
         # and model_fields_set contains the field
-        if self.template_id is None and "template_id" in self.model_fields_set:
-            _dict['template_id'] = None
+        if self.tag is None and "tag" in self.model_fields_set:
+            _dict['tag'] = None
 
-        # set to None if exec_tm (nullable) is None
+        # set to None if description (nullable) is None
         # and model_fields_set contains the field
-        if self.exec_tm is None and "exec_tm" in self.model_fields_set:
-            _dict['exec_tm'] = None
+        if self.description is None and "description" in self.model_fields_set:
+            _dict['description'] = None
 
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of Transaction from a dict"""
+        """Create an instance of CreateVersionRequest from a dict"""
         if obj is None:
             return None
 
@@ -97,12 +104,8 @@ class Transaction(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "transaction_ref": obj.get("transaction_ref"),
-            "transaction_type": obj.get("transaction_type"),
-            "template_id": obj.get("template_id"),
-            "exec_tm": obj.get("exec_tm"),
-            "credits": obj.get("credits"),
-            "created_at": obj.get("created_at")
+            "tag": obj.get("tag"),
+            "description": obj.get("description")
         })
         return _obj
 

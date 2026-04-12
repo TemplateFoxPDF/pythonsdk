@@ -1,6 +1,6 @@
 # TemplateFox Python SDK
 
-Official Python SDK for [TemplateFox](https://pdftemplateapi.com) - Generate PDFs from HTML templates via API.
+Official Python SDK for [TemplateFox](https://templatefox.com) - Generate PDFs from HTML templates via API.
 
 [![PyPI version](https://badge.fury.io/py/templatefox.svg)](https://pypi.org/project/templatefox/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -139,7 +139,7 @@ print(f'Connection: {"OK" if test.success else "Failed"}')
 from templatefox import Configuration
 
 config = Configuration(
-    host='https://api.pdftemplateapi.com',  # Default API URL
+    host='https://api.templatefox.com',  # Default API URL
 )
 config.api_key['ApiKeyAuth'] = 'your-api-key'
 
@@ -190,13 +190,13 @@ asyncio.run(generate_pdfs())
 
 ## Documentation
 
-- [API Documentation](https://pdftemplateapi.com/docs)
-- [Swagger UI](https://api.pdftemplateapi.com/docs)
-- [Dashboard](https://pdftemplateapi.com/dashboard)
+- [API Documentation](https://templatefox.com/docs)
+- [Swagger UI](https://api.templatefox.com/docs)
+- [Dashboard](https://templatefox.com/dashboard)
 
 ## Support
 
-- Email: support@pdftemplateapi.com
+- Email: support@templatefox.com
 - Issues: [GitHub Issues](https://github.com/TemplateFoxPDF/pythonsdk/issues)
 
 ## License

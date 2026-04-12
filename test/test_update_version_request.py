@@ -15,10 +15,10 @@
 
 import unittest
 
-from templatefox.models.location_inner import LocationInner
+from templatefox.models.update_version_request import UpdateVersionRequest
 
-class TestLocationInner(unittest.TestCase):
-    """LocationInner unit test stubs"""
+class TestUpdateVersionRequest(unittest.TestCase):
+    """UpdateVersionRequest unit test stubs"""
 
     def setUp(self):
         pass
@@ -26,24 +26,26 @@ class TestLocationInner(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> LocationInner:
-        """Test LocationInner
+    def make_instance(self, include_optional) -> UpdateVersionRequest:
+        """Test UpdateVersionRequest
             include_optional is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # uncomment below to create an instance of `LocationInner`
+        # uncomment below to create an instance of `UpdateVersionRequest`
         """
-        model = LocationInner()
+        model = UpdateVersionRequest()
         if include_optional:
-            return LocationInner(
+            return UpdateVersionRequest(
+                tag = 'wwat5ikwowtta-3mh2lcafqw37',
+                description = ''
             )
         else:
-            return LocationInner(
+            return UpdateVersionRequest(
         )
         """
 
-    def testLocationInner(self):
-        """Test LocationInner"""
+    def testUpdateVersionRequest(self):
+        """Test UpdateVersionRequest"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 
