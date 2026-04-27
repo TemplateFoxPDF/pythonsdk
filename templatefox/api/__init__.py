@@ -5,5 +5,6 @@ from templatefox.api.account_api import AccountApi
 from templatefox.api.integrations_api import IntegrationsApi
 from templatefox.api.pdf_api import PDFApi
 from templatefox.api.pdf_async_api import PDFAsyncApi
+from templatefox.api.pdf_tools_api import PDFToolsApi
 from templatefox.api.templates_api import TemplatesApi
 
