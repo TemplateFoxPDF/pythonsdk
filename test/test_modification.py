@@ -15,10 +15,10 @@
 
 import unittest
 
-from templatefox.models.template_field_spec import TemplateFieldSpec
+from templatefox.models.modification import Modification
 
-class TestTemplateFieldSpec(unittest.TestCase):
-    """TemplateFieldSpec unit test stubs"""
+class TestModification(unittest.TestCase):
+    """Modification unit test stubs"""
 
     def setUp(self):
         pass
@@ -26,29 +26,31 @@ class TestTemplateFieldSpec(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> TemplateFieldSpec:
-        """Test TemplateFieldSpec
+    def make_instance(self, include_optional) -> Modification:
+        """Test Modification
             include_optional is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # uncomment below to create an instance of `TemplateFieldSpec`
+        # uncomment below to create an instance of `Modification`
         """
-        model = TemplateFieldSpec()
+        model = Modification()
         if include_optional:
-            return TemplateFieldSpec(
-                name = '',
-                label = '',
-                type = 'text'
+            return Modification(
+                name = '0',
+                text = '',
+                image_url = 'https:/',
+                color = '',
+                background = '',
+                hidden = True
             )
         else:
-            return TemplateFieldSpec(
-                name = '',
-                label = '',
+            return Modification(
+                name = '0',
         )
         """
 
-    def testTemplateFieldSpec(self):
-        """Test TemplateFieldSpec"""
+    def testModification(self):
+        """Test Modification"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

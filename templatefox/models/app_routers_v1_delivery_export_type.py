@@ -19,22 +19,20 @@ from enum import Enum
 from typing_extensions import Self
 
 
-class JobStatus(str, Enum):
+class AppRoutersV1DeliveryExportType(str, Enum):
     """
-    PDF job status values
+    Output delivery type options
     """
 
     """
     allowed enum values
     """
-    PENDING = 'pending'
-    PROCESSING = 'processing'
-    COMPLETED = 'completed'
-    FAILED = 'failed'
+    URL = 'url'
+    BINARY = 'binary'
 
     @classmethod
     def from_json(cls, json_str: str) -> Self:
-        """Create an instance of JobStatus from a JSON string"""
+        """Create an instance of AppRoutersV1DeliveryExportType from a JSON string"""
         return cls(json.loads(json_str))
 
 

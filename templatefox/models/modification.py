@@ -18,34 +18,33 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictStr, field_validator
+from pydantic import BaseModel, ConfigDict, Field, StrictBool, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
-from templatefox.models.app_routers_v1_pdf_tools_export_type import AppRoutersV1PdfToolsExportType
 from typing import Optional, Set
 from typing_extensions import Self
 from pydantic_core import to_jsonable_python
 
-class ExtractPdfPagesRequest(BaseModel):
+class Modification(BaseModel):
     """
-    ExtractPdfPagesRequest
+    A single element modification, addressed by layer name.
     """ # noqa: E501
-    export_type: Optional[AppRoutersV1PdfToolsExportType] = Field(default=None, description="`url` uploads to CDN and returns URL, `binary` returns raw PDF bytes")
-    expiration: Optional[Annotated[int, Field(le=604800, strict=True, ge=60)]] = Field(default=86400, description="URL expiration in seconds. Min 60, max 604800. Only applies to `url` export type.")
-    filename: Optional[Annotated[str, Field(strict=True, max_length=100)]] = None
-    pdf_url: Optional[StrictStr] = None
-    pdf_base64: Optional[StrictStr] = None
-    pages: StrictStr = Field(description="1-indexed page selection. Supports ranges and singles separated by commas, e.g. `1-3, 5, 7-9`. Order is preserved (`5,1,3` outputs those 3 pages in that order).")
-    __properties: ClassVar[List[str]] = ["export_type", "expiration", "filename", "pdf_url", "pdf_base64", "pages"]
+    name: Annotated[str, Field(min_length=1, strict=True, max_length=200)] = Field(description="Name of the layer to modify (set via the editor's Layers panel). Matched against the element's `data-layer-name`, falling back to its `id`.")
+    text: Optional[Annotated[str, Field(strict=True, max_length=10000)]] = None
+    image_url: Optional[Annotated[str, Field(strict=True, max_length=2000)]] = None
+    color: Optional[Annotated[str, Field(strict=True, max_length=100)]] = None
+    background: Optional[Annotated[str, Field(strict=True, max_length=100)]] = None
+    hidden: Optional[StrictBool] = None
+    __properties: ClassVar[List[str]] = ["name", "text", "image_url", "color", "background", "hidden"]
 
-    @field_validator('filename')
-    def filename_validate_regular_expression(cls, value):
+    @field_validator('image_url')
+    def image_url_validate_regular_expression(cls, value):
         """Validates the regular expression"""
         if value is None:
             return value
 
-        if not re.match(r"^[a-zA-Z0-9_\-\.]+$", value):
-            raise ValueError(r"must validate the regular expression /^[a-zA-Z0-9_\-\.]+$/")
+        if not re.match(r"^https?:\/\/", value):
+            raise ValueError(r"must validate the regular expression /^https?:\/\//")
         return value
 
     model_config = ConfigDict(
@@ -66,7 +65,7 @@ class ExtractPdfPagesRequest(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of ExtractPdfPagesRequest from a JSON string"""
+        """Create an instance of Modification from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -87,26 +86,36 @@ class ExtractPdfPagesRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # set to None if filename (nullable) is None
+        # set to None if text (nullable) is None
         # and model_fields_set contains the field
-        if self.filename is None and "filename" in self.model_fields_set:
-            _dict['filename'] = None
+        if self.text is None and "text" in self.model_fields_set:
+            _dict['text'] = None
 
-        # set to None if pdf_url (nullable) is None
+        # set to None if image_url (nullable) is None
         # and model_fields_set contains the field
-        if self.pdf_url is None and "pdf_url" in self.model_fields_set:
-            _dict['pdf_url'] = None
+        if self.image_url is None and "image_url" in self.model_fields_set:
+            _dict['image_url'] = None
 
-        # set to None if pdf_base64 (nullable) is None
+        # set to None if color (nullable) is None
         # and model_fields_set contains the field
-        if self.pdf_base64 is None and "pdf_base64" in self.model_fields_set:
-            _dict['pdf_base64'] = None
+        if self.color is None and "color" in self.model_fields_set:
+            _dict['color'] = None
+
+        # set to None if background (nullable) is None
+        # and model_fields_set contains the field
+        if self.background is None and "background" in self.model_fields_set:
+            _dict['background'] = None
+
+        # set to None if hidden (nullable) is None
+        # and model_fields_set contains the field
+        if self.hidden is None and "hidden" in self.model_fields_set:
+            _dict['hidden'] = None
 
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of ExtractPdfPagesRequest from a dict"""
+        """Create an instance of Modification from a dict"""
         if obj is None:
             return None
 
@@ -114,12 +123,12 @@ class ExtractPdfPagesRequest(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "export_type": obj.get("export_type"),
-            "expiration": obj.get("expiration") if obj.get("expiration") is not None else 86400,
-            "filename": obj.get("filename"),
-            "pdf_url": obj.get("pdf_url"),
-            "pdf_base64": obj.get("pdf_base64"),
-            "pages": obj.get("pages")
+            "name": obj.get("name"),
+            "text": obj.get("text"),
+            "image_url": obj.get("image_url"),
+            "color": obj.get("color"),
+            "background": obj.get("background"),
+            "hidden": obj.get("hidden")
         })
         return _obj
 

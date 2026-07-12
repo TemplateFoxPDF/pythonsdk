@@ -15,20 +15,25 @@
 
 import unittest
 
-from templatefox.models.pdf_variant import PdfVariant
+from templatefox.api.image_api import ImageApi
 
-class TestPdfVariant(unittest.TestCase):
-    """PdfVariant unit test stubs"""
 
-    def setUp(self):
+class TestImageApi(unittest.TestCase):
+    """ImageApi unit test stubs"""
+
+    def setUp(self) -> None:
+        self.api = ImageApi()
+
+    def tearDown(self) -> None:
         pass
 
-    def tearDown(self):
+    def test_create_image(self) -> None:
+        """Test case for create_image
+
+        Generate image from template
+        """
         pass
 
-    def testPdfVariant(self):
-        """Test PdfVariant"""
-        # inst = PdfVariant()
 
 if __name__ == '__main__':
     unittest.main()

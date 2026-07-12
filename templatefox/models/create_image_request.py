@@ -22,26 +22,30 @@ from pydantic import BaseModel, ConfigDict, Field, StrictBool, field_validator
 from typing import Any, ClassVar, Dict, List, Optional
 from typing_extensions import Annotated
 from templatefox.models.app_routers_v1_delivery_export_type import AppRoutersV1DeliveryExportType
-from templatefox.models.pdf_variant import PdfVariant
+from templatefox.models.image_format import ImageFormat
+from templatefox.models.modification import Modification
 from typing import Optional, Set
 from typing_extensions import Self
 from pydantic_core import to_jsonable_python
 
-class CreatePdfRequest(BaseModel):
+class CreateImageRequest(BaseModel):
     """
-    Request model for PDF generation
+    Request model for image generation
     """ # noqa: E501
     template_id: Annotated[str, Field(min_length=12, strict=True, max_length=12)] = Field(description="Template short ID (12 characters)")
-    data: Dict[str, Any] = Field(description="Key-value data to render in the template. Keys must match template variables.")
-    export_type: Optional[AppRoutersV1DeliveryExportType] = Field(default=None, description="Export format: `url` uploads to CDN and returns URL, `binary` returns raw PDF bytes")
+    modifications: Optional[Annotated[List[Modification], Field(max_length=100)]] = None
+    data: Optional[Dict[str, Any]] = Field(default=None, description="Optional key-value data merged into `{{ }}` template variables. For most image templates, prefer `modifications` instead.")
+    format: Optional[ImageFormat] = Field(default=None, description="Output image format: `png` (default), `jpeg` or `webp`.")
+    width: Optional[Annotated[int, Field(le=4000, strict=True, ge=100)]] = None
+    quality: Optional[Annotated[int, Field(le=100, strict=True, ge=1)]] = Field(default=85, description="Compression quality for `jpeg`/`webp` (1-100). Ignored for `png`.")
+    export_type: Optional[AppRoutersV1DeliveryExportType] = Field(default=None, description="Export format: `url` uploads to CDN and returns URL, `binary` returns raw image bytes")
     expiration: Optional[Annotated[int, Field(le=604800, strict=True, ge=60)]] = Field(default=86400, description="URL expiration in seconds. Min: 60 (1 min), Max: 604800 (7 days). Only applies to `url` export type.")
     filename: Optional[Annotated[str, Field(strict=True, max_length=100)]] = None
     store_s3: Optional[StrictBool] = Field(default=False, description="Upload to your configured S3 bucket instead of CDN")
     s3_filepath: Optional[Annotated[str, Field(strict=True, max_length=500)]] = None
     s3_bucket: Optional[Annotated[str, Field(min_length=3, strict=True, max_length=63)]] = None
-    pdf_variant: Optional[PdfVariant] = None
     version: Optional[Annotated[str, Field(strict=True, max_length=50)]] = None
-    __properties: ClassVar[List[str]] = ["template_id", "data", "export_type", "expiration", "filename", "store_s3", "s3_filepath", "s3_bucket", "pdf_variant", "version"]
+    __properties: ClassVar[List[str]] = ["template_id", "modifications", "data", "format", "width", "quality", "export_type", "expiration", "filename", "store_s3", "s3_filepath", "s3_bucket", "version"]
 
     @field_validator('filename')
     def filename_validate_regular_expression(cls, value):
@@ -91,7 +95,7 @@ class CreatePdfRequest(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of CreatePdfRequest from a JSON string"""
+        """Create an instance of CreateImageRequest from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -112,6 +116,23 @@ class CreatePdfRequest(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
+        # override the default output from pydantic by calling `to_dict()` of each item in modifications (list)
+        _items = []
+        if self.modifications:
+            for _item_modifications in self.modifications:
+                if _item_modifications:
+                    _items.append(_item_modifications.to_dict())
+            _dict['modifications'] = _items
+        # set to None if modifications (nullable) is None
+        # and model_fields_set contains the field
+        if self.modifications is None and "modifications" in self.model_fields_set:
+            _dict['modifications'] = None
+
+        # set to None if width (nullable) is None
+        # and model_fields_set contains the field
+        if self.width is None and "width" in self.model_fields_set:
+            _dict['width'] = None
+
         # set to None if filename (nullable) is None
         # and model_fields_set contains the field
         if self.filename is None and "filename" in self.model_fields_set:
@@ -127,11 +148,6 @@ class CreatePdfRequest(BaseModel):
         if self.s3_bucket is None and "s3_bucket" in self.model_fields_set:
             _dict['s3_bucket'] = None
 
-        # set to None if pdf_variant (nullable) is None
-        # and model_fields_set contains the field
-        if self.pdf_variant is None and "pdf_variant" in self.model_fields_set:
-            _dict['pdf_variant'] = None
-
         # set to None if version (nullable) is None
         # and model_fields_set contains the field
         if self.version is None and "version" in self.model_fields_set:
@@ -141,7 +157,7 @@ class CreatePdfRequest(BaseModel):
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of CreatePdfRequest from a dict"""
+        """Create an instance of CreateImageRequest from a dict"""
         if obj is None:
             return None
 
@@ -150,14 +166,17 @@ class CreatePdfRequest(BaseModel):
 
         _obj = cls.model_validate({
             "template_id": obj.get("template_id"),
+            "modifications": [Modification.from_dict(_item) for _item in obj["modifications"]] if obj.get("modifications") is not None else None,
             "data": obj.get("data"),
+            "format": obj.get("format"),
+            "width": obj.get("width"),
+            "quality": obj.get("quality") if obj.get("quality") is not None else 85,
             "export_type": obj.get("export_type"),
             "expiration": obj.get("expiration") if obj.get("expiration") is not None else 86400,
             "filename": obj.get("filename"),
             "store_s3": obj.get("store_s3") if obj.get("store_s3") is not None else False,
             "s3_filepath": obj.get("s3_filepath"),
             "s3_bucket": obj.get("s3_bucket"),
-            "pdf_variant": obj.get("pdf_variant"),
             "version": obj.get("version")
         })
         return _obj

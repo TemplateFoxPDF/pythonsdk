@@ -15,10 +15,10 @@
 
 import unittest
 
-from templatefox.models.pdf_variant import PdfVariant
+from templatefox.models.app_routers_v1_delivery_export_type import AppRoutersV1DeliveryExportType
 
-class TestPdfVariant(unittest.TestCase):
-    """PdfVariant unit test stubs"""
+class TestAppRoutersV1DeliveryExportType(unittest.TestCase):
+    """AppRoutersV1DeliveryExportType unit test stubs"""
 
     def setUp(self):
         pass
@@ -26,9 +26,9 @@ class TestPdfVariant(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def testPdfVariant(self):
-        """Test PdfVariant"""
-        # inst = PdfVariant()
+    def testAppRoutersV1DeliveryExportType(self):
+        """Test AppRoutersV1DeliveryExportType"""
+        # inst = AppRoutersV1DeliveryExportType()
 
 if __name__ == '__main__':
     unittest.main()

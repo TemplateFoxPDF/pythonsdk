@@ -15,10 +15,10 @@
 
 import unittest
 
-from templatefox.models.template_field_spec import TemplateFieldSpec
+from templatefox.models.create_image_response import CreateImageResponse
 
-class TestTemplateFieldSpec(unittest.TestCase):
-    """TemplateFieldSpec unit test stubs"""
+class TestCreateImageResponse(unittest.TestCase):
+    """CreateImageResponse unit test stubs"""
 
     def setUp(self):
         pass
@@ -26,29 +26,35 @@ class TestTemplateFieldSpec(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> TemplateFieldSpec:
-        """Test TemplateFieldSpec
+    def make_instance(self, include_optional) -> CreateImageResponse:
+        """Test CreateImageResponse
             include_optional is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # uncomment below to create an instance of `TemplateFieldSpec`
+        # uncomment below to create an instance of `CreateImageResponse`
         """
-        model = TemplateFieldSpec()
+        model = CreateImageResponse()
         if include_optional:
-            return TemplateFieldSpec(
-                name = '',
-                label = '',
-                type = 'text'
+            return CreateImageResponse(
+                url = '',
+                filename = '',
+                credits_remaining = 56,
+                expires_in = 56,
+                warnings = [
+                    ''
+                    ]
             )
         else:
-            return TemplateFieldSpec(
-                name = '',
-                label = '',
+            return CreateImageResponse(
+                url = '',
+                filename = '',
+                credits_remaining = 56,
+                expires_in = 56,
         )
         """
 
-    def testTemplateFieldSpec(self):
-        """Test TemplateFieldSpec"""
+    def testCreateImageResponse(self):
+        """Test CreateImageResponse"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

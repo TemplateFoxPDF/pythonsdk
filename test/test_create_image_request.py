@@ -15,10 +15,10 @@
 
 import unittest
 
-from templatefox.models.create_async_pdf_request import CreateAsyncPdfRequest
+from templatefox.models.create_image_request import CreateImageRequest
 
-class TestCreateAsyncPdfRequest(unittest.TestCase):
-    """CreateAsyncPdfRequest unit test stubs"""
+class TestCreateImageRequest(unittest.TestCase):
+    """CreateImageRequest unit test stubs"""
 
     def setUp(self):
         pass
@@ -26,38 +26,46 @@ class TestCreateAsyncPdfRequest(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> CreateAsyncPdfRequest:
-        """Test CreateAsyncPdfRequest
+    def make_instance(self, include_optional) -> CreateImageRequest:
+        """Test CreateImageRequest
             include_optional is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # uncomment below to create an instance of `CreateAsyncPdfRequest`
+        # uncomment below to create an instance of `CreateImageRequest`
         """
-        model = CreateAsyncPdfRequest()
+        model = CreateImageRequest()
         if include_optional:
-            return CreateAsyncPdfRequest(
+            return CreateImageRequest(
                 template_id = '01234567891011',
+                modifications = [
+                    templatefox.models.modification.Modification(
+                        name = '0', 
+                        text = '', 
+                        image_url = 'https:/', 
+                        color = '', 
+                        background = '', 
+                        hidden = True, )
+                    ],
                 data = { },
+                format = 'png',
+                width = 100.0,
+                quality = 1.0,
                 export_type = 'url',
                 expiration = 60.0,
                 filename = '2',
                 store_s3 = True,
                 s3_filepath = '/',
                 s3_bucket = 'wwat4ikwowtta-2mh1lcafqw2zhes0012',
-                webhook_url = '0',
-                webhook_secret = '0123456789101112131415',
-                pdf_variant = 'pdf/a-1b',
                 version = ''
             )
         else:
-            return CreateAsyncPdfRequest(
+            return CreateImageRequest(
                 template_id = '01234567891011',
-                data = { },
         )
         """
 
-    def testCreateAsyncPdfRequest(self):
-        """Test CreateAsyncPdfRequest"""
+    def testCreateImageRequest(self):
+        """Test CreateImageRequest"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

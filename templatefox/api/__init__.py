@@ -2,6 +2,7 @@
 
 # import apis into api package
 from templatefox.api.account_api import AccountApi
+from templatefox.api.image_api import ImageApi
 from templatefox.api.integrations_api import IntegrationsApi
 from templatefox.api.pdf_api import PDFApi
 from templatefox.api.pdf_async_api import PDFAsyncApi

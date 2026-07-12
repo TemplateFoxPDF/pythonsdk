@@ -18,19 +18,22 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field, StrictInt, StrictStr
 from typing import Any, ClassVar, Dict, List, Optional
-from templatefox.models.validation_error import ValidationError
 from typing import Optional, Set
 from typing_extensions import Self
 from pydantic_core import to_jsonable_python
 
-class HTTPValidationError(BaseModel):
+class CreateImageResponse(BaseModel):
     """
-    HTTPValidationError
+    Response for URL export type
     """ # noqa: E501
-    detail: Optional[List[ValidationError]] = None
-    __properties: ClassVar[List[str]] = ["detail"]
+    url: StrictStr = Field(description="Signed URL to download the image (expires after specified time)")
+    filename: StrictStr = Field(description="Filename of the generated image")
+    credits_remaining: StrictInt = Field(description="Remaining credits after this request")
+    expires_in: StrictInt = Field(description="Seconds until the signed URL expires")
+    warnings: Optional[List[StrictStr]] = None
+    __properties: ClassVar[List[str]] = ["url", "filename", "credits_remaining", "expires_in", "warnings"]
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -50,7 +53,7 @@ class HTTPValidationError(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of HTTPValidationError from a JSON string"""
+        """Create an instance of CreateImageResponse from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -71,18 +74,16 @@ class HTTPValidationError(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of each item in detail (list)
-        _items = []
-        if self.detail:
-            for _item_detail in self.detail:
-                if _item_detail:
-                    _items.append(_item_detail.to_dict())
-            _dict['detail'] = _items
+        # set to None if warnings (nullable) is None
+        # and model_fields_set contains the field
+        if self.warnings is None and "warnings" in self.model_fields_set:
+            _dict['warnings'] = None
+
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of HTTPValidationError from a dict"""
+        """Create an instance of CreateImageResponse from a dict"""
         if obj is None:
             return None
 
@@ -90,7 +91,11 @@ class HTTPValidationError(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "detail": [ValidationError.from_dict(_item) for _item in obj["detail"]] if obj.get("detail") is not None else None
+            "url": obj.get("url"),
+            "filename": obj.get("filename"),
+            "credits_remaining": obj.get("credits_remaining"),
+            "expires_in": obj.get("expires_in"),
+            "warnings": obj.get("warnings")
         })
         return _obj
 
