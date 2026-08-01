@@ -15,10 +15,10 @@
 
 import unittest
 
-from templatefox.models.rotate_pdf_request import RotatePdfRequest
+from templatefox.models.template_layer import TemplateLayer
 
-class TestRotatePdfRequest(unittest.TestCase):
-    """RotatePdfRequest unit test stubs"""
+class TestTemplateLayer(unittest.TestCase):
+    """TemplateLayer unit test stubs"""
 
     def setUp(self):
         pass
@@ -26,33 +26,37 @@ class TestRotatePdfRequest(unittest.TestCase):
     def tearDown(self):
         pass
 
-    def make_instance(self, include_optional) -> RotatePdfRequest:
-        """Test RotatePdfRequest
+    def make_instance(self, include_optional) -> TemplateLayer:
+        """Test TemplateLayer
             include_optional is a boolean, when False only required
             params are included, when True both required and
             optional params are included """
-        # uncomment below to create an instance of `RotatePdfRequest`
+        # uncomment below to create an instance of `TemplateLayer`
         """
-        model = RotatePdfRequest()
+        model = TemplateLayer()
         if include_optional:
-            return RotatePdfRequest(
-                export_type = 'url',
-                expiration = 60.0,
-                filename = '2',
-                pdf_url = '',
-                pdf_base64 = '',
-                rotation = 56,
-                page_rotations = {
-                    'key' : 56
-                    }
+            return TemplateLayer(
+                name = '',
+                tag = '',
+                type = '',
+                current_text = '',
+                modifiable = [
+                    ''
+                    ]
             )
         else:
-            return RotatePdfRequest(
+            return TemplateLayer(
+                name = '',
+                tag = '',
+                type = '',
+                modifiable = [
+                    ''
+                    ],
         )
         """
 
-    def testRotatePdfRequest(self):
-        """Test RotatePdfRequest"""
+    def testTemplateLayer(self):
+        """Test TemplateLayer"""
         # inst_req_only = self.make_instance(include_optional=False)
         # inst_req_and_optional = self.make_instance(include_optional=True)
 

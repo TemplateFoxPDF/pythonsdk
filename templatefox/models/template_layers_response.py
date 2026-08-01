@@ -18,22 +18,20 @@ import pprint
 import re  # noqa: F401
 import json
 
-from pydantic import BaseModel, ConfigDict, Field, StrictInt
-from typing import Any, ClassVar, Dict, List
-from templatefox.models.transaction import Transaction
+from pydantic import BaseModel, ConfigDict, Field, StrictStr
+from typing import Any, ClassVar, Dict, List, Optional
+from templatefox.models.template_layer import TemplateLayer
 from typing import Optional, Set
 from typing_extensions import Self
 from pydantic_core import to_jsonable_python
 
-class TransactionsResponse(BaseModel):
+class TemplateLayersResponse(BaseModel):
     """
-    Response for transactions list endpoint
+    Response for template layers endpoint
     """ # noqa: E501
-    transactions: List[Transaction]
-    total: StrictInt = Field(description="Total number of transactions")
-    limit: StrictInt = Field(description="Number of records returned")
-    offset: StrictInt = Field(description="Number of records skipped")
-    __properties: ClassVar[List[str]] = ["transactions", "total", "limit", "offset"]
+    layers: List[TemplateLayer]
+    warnings: Optional[List[StrictStr]] = Field(default=None, description="Non-fatal issues (e.g. duplicate layer names)")
+    __properties: ClassVar[List[str]] = ["layers", "warnings"]
 
     model_config = ConfigDict(
         validate_by_name=True,
@@ -53,7 +51,7 @@ class TransactionsResponse(BaseModel):
 
     @classmethod
     def from_json(cls, json_str: str) -> Optional[Self]:
-        """Create an instance of TransactionsResponse from a JSON string"""
+        """Create an instance of TemplateLayersResponse from a JSON string"""
         return cls.from_dict(json.loads(json_str))
 
     def to_dict(self) -> Dict[str, Any]:
@@ -74,18 +72,18 @@ class TransactionsResponse(BaseModel):
             exclude=excluded_fields,
             exclude_none=True,
         )
-        # override the default output from pydantic by calling `to_dict()` of each item in transactions (list)
+        # override the default output from pydantic by calling `to_dict()` of each item in layers (list)
         _items = []
-        if self.transactions:
-            for _item_transactions in self.transactions:
-                if _item_transactions:
-                    _items.append(_item_transactions.to_dict())
-            _dict['transactions'] = _items
+        if self.layers:
+            for _item_layers in self.layers:
+                if _item_layers:
+                    _items.append(_item_layers.to_dict())
+            _dict['layers'] = _items
         return _dict
 
     @classmethod
     def from_dict(cls, obj: Optional[Dict[str, Any]]) -> Optional[Self]:
-        """Create an instance of TransactionsResponse from a dict"""
+        """Create an instance of TemplateLayersResponse from a dict"""
         if obj is None:
             return None
 
@@ -93,10 +91,8 @@ class TransactionsResponse(BaseModel):
             return cls.model_validate(obj)
 
         _obj = cls.model_validate({
-            "transactions": [Transaction.from_dict(_item) for _item in obj["transactions"]] if obj.get("transactions") is not None else None,
-            "total": obj.get("total"),
-            "limit": obj.get("limit"),
-            "offset": obj.get("offset")
+            "layers": [TemplateLayer.from_dict(_item) for _item in obj["layers"]] if obj.get("layers") is not None else None,
+            "warnings": obj.get("warnings")
         })
         return _obj
 
